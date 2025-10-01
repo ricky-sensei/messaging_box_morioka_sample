@@ -1,16 +1,16 @@
 from flask import Flask, flash, redirect, render_template, request  
-from flask_login import LoginManager, login_user # ログイン関連
-from werkzeug.security import generate_password_hash, check_password_hash  # 入力されたｐｗとＤＢ上のｐｗを比較
+from flask_login import LoginManager, current_user, login_user, logout_user  # ログアウト機能(logout_use)を追加・ユーザー情報(current_user)を追加
+from werkzeug.security import generate_password_hash, check_password_hash  
 from config import User
 
 app = Flask(__name__)
 app.secret_key = "secret"
 
-# LoginManagerの設定
-login_manager = LoginManager()  # LoginManagerのインスタンス化
-login_manager.init_app(app)     # appのログイン情報を初期化
 
-# ユーザー情報を取得するためのメソッド
+login_manager = LoginManager()  
+login_manager.init_app(app)     
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.get_by_id(user_id)
@@ -24,7 +24,7 @@ def register():
     
     if request.method == "POST":
         
-        if not request.form["name"] or request.form["password"] or request.form["email"]:
+        if not request.form["name"] or not request.form["password"] or not request.form["email"]:
             flash("未入力の項目があります。")
             return redirect(request.url)
         
@@ -51,28 +51,44 @@ def register():
     return render_template("register.html")
 
 
-# login用のルーティングを作成
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    # postリクエストのときに
+    
     if request.method == "POST":
-        # 未入力処理
+        
         if not request.form["password"] or not request.form["email"]:
             flash("未入力の項目があります")
             return redirect(request.url)
         
-        # ユーザー認証
-        user = User.select().where(User.email == request.form["email"]).first()  # メールアドレスが合致するユーザーの最初のレコード
-        if user is not None and check_password_hash(user.password, request.form["password"]):  # 合致するレコードが存在していて、パスワードがＤＢのものと合致した場合
-            login_user(user)  # ログイン処理
-            flash(f"ようこそ！{user.name}さん")  # フラッシュメッセージ
-            return redirect("/")  # index.htmlを表示
+        
+        user = User.select().where(User.email == request.form["email"]).first()  
+        if user is not None and check_password_hash(user.password, request.form["password"]):  
+            login_user(user)  
+            flash(f"ようこそ！{user.name}さん")  
+            return redirect("/")  
 
-        # 認証失敗のときのフラッシュメッセージ
+        
         flash("認証に失敗しました")
         
         
     return render_template('login.html')
+
+
+# ログアウト処理
+@app.route('/logout')
+def logout():
+    logout_user()
+    flash("ログアウトしました!")
+    return redirect('/')
+
+
+# ユーザー削除処理
+@app.route('/unregister')
+def unregister():
+    current_user.delete_instance()
+    logout_user()
+    return redirect("/")
 
 
 @app.route("/")
