@@ -24,7 +24,12 @@
                     </form>
                 {% endif %}
                 <div class="message-content">
-                    {{ message.content }}
+                    <a href="{{ url_for('show', message_id=message.id) }}">
+                          {{ message.content }}
+                    </a>
+                    {% if message.messages.count() > 0 %}
+                        {{ message.messages.count() }}件の返信
+                    {% endif %}
                 </div>
             </li>
         </div>

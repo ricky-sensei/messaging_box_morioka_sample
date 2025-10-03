@@ -1,17 +1,13 @@
-""" 9メッセージの投稿 表示 削除
-[] サーバー停止
-[] メッセージテーブルの作成
-    []Messageモデルを追加:config.py(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#message%E3%83%A2%E3%83%87%E3%83%AB%E4%BD%9C%E6%88%90)
-[] メッセージ投稿機能
-    [] メッセージ投稿のフォームを追加:index.html(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E4%BF%AE%E6%AD%A3)
-    [] postリクエストを許可:app.py(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E4%BF%AE%E6%AD%A3)
-    [] 投稿処理
-        [] Messageテーブルに投稿をinsert（https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E6%8A%95%E7%A8%BF%E5%87%A6%E7%90%86）
-        [] 投稿したメッセージを表示
-            [] メッセージ一覧を取得してindex.htmlにわたす:app.py(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%99%E3%83%BC%E3%82%B9%E3%81%8B%E3%82%89%E5%85%A8%E6%A8%A9%E5%8F%96%E5%BE%97)
-            [] メッセージを表示:index.html'(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E4%BF%AE%E6%AD%A3-1)
-[] メッセージ削除機能
-    []削除用のリンクを表示:index.html(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E5%89%8A%E9%99%A4%E3%81%AE%E3%83%AA%E3%83%B3%E3%82%AF%E3%82%92%E8%BF%BD%E5%8A%A0)
-    []削除用のルーティングを作成:app.py(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/09.md#%E3%83%AB%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%A8%E5%89%8A%E9%99%A4%E5%87%A6%E7%90%86)
+""" 10 返信の投稿 表示 削除
+[] メッセージを返信用のページのリンクにする:index.html
+[] ルーティングの追加:app.py
+[] テンプレートの作成 :show.html
+[] 返信の表示
+    []ルーティングの修正:app.py(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/10.md#%E8%BF%94%E4%BF%A1%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%82%92%E8%A1%A8%E7%A4%BA)
+    []テンプレートの修正:show.html(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/10.md#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E4%BF%AE%E6%AD%A3)
+[] 返信投稿機能
+    []ルーティングの修正_message_idの追加：app.py(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/10.md#%E3%83%AB%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E4%BF%AE%E6%AD%A3)
+    []テンプレートの修正 投稿用フォームを追加(https://edu.next-revolution.net/1048210623/doc/15_flask_db_app/01_message-app/10.md#%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88%E4%BF%AE%E6%AD%A3-1)
+    
 
 """

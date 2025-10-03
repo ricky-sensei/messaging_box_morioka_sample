@@ -98,8 +98,25 @@ def delete(message_id):
         Message.delete_by_id(message_id)
     else:
         flash("無効な操作です")
-    return redirect(url_for("index"))
+    return redirect(request.referrer)
 
+@app.route('/message/<message_id>/')
+def show(message_id):
+    messages = (
+        Message.select()
+        .where((Message.id == message_id) | (Message.reply_to == message_id))
+        .order_by(Message.pub_date.desc())
+    )
+    if messages.count() == 0:
+        return redirect(url_for('index'))
+    return render_template("show.html", messages=messages, message_id=message_id)
+
+# 返信登録
+@app.route("/messages/<message_id>/", methods=["POST"])
+@login_required
+def reply(message_id):
+    Message.create(user=current_user, content=request.form["content"], reply_to=message_id)
+    return redirect(url_for("show", message_id=message_id))
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8000, debug=True)
