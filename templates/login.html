@@ -4,14 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MessageBox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    {% for message in get_flashed_messages() %}
+    <div>
+        <h1><a href="{{ url_for('index') }}">MessageBOX</a></h1>
+        <div class="metanav">
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('login') }}">LogIn</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            {% else %}
+                <a href="{{ url_for('logout') }}">LogOut</a>
+            {% endif %}
+        </div>
+        {% for message in get_flashed_messages() %}
         <p>{{ message }}</p>
-    {% endfor %}
-
-    <h2>LogIn</h2>
-    <form action="" method="post">
+        {% endfor %}
+        
+        <h2>LogIn</h2>
+        <form action="" method="post">
         <label for="email">Email:</label>
         <br>
         <input type="email" name="email" id="email">
@@ -22,5 +33,6 @@
         <br>
         <input type="submit" value="Login">
     </form>
+    </div>
 </body>
 </html>
