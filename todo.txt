@@ -1,6 +1,7 @@
-""" 7 スタイルの適用
-[]staticフォルダ・cssファイルの用意
-[]index.html, login.html, register.htmlでcssを読み込み
-[]index.html, login.html, register.htmlにヘッダーを追加
-[]確認
+""" 8 ベーステンプレート
+[] base.htmlの作成
+[] ベーステンプレートの適用
+    []index.html
+    []login.html
+    []register.html
 """
