@@ -1,6 +1,6 @@
+import datetime
 from flask_login import UserMixin
-from peewee import SqliteDatabase, Model, IntegerField, CharField, TextField
-
+from peewee import SqliteDatabase, Model, IntegerField, CharField, TextField, TimestampField, ForeignKeyField
 db = SqliteDatabase("db.sqlite")
 
 
@@ -14,6 +14,23 @@ class User(Model, UserMixin):
     class Meta:
         database = db
         table_name = "users"
+
+class Message(Model):
+    id = IntegerField(primary_key=True)
+    user = ForeignKeyField(User, backref="messages", on_delete="CASCADE")  # 参照先が削除された場合は削除する
+    content = TextField()
+    pub_date = TimestampField(default=datetime.datetime.now)
+    reply_to = ForeignKeyField("self", backref="messages", on_delete="CASCADE", null=True)  # 参照先が削除された場合は削除する nullを許容する
+
+    class Meta:
+        database = db
+        table_name = "messages"
+
+
+db.create_tables([User, Message])
+db.pragma('foreign_keys', 1, permanent=True)  # on_deleteを動作させるオプション設定を追加
+
+
 
 
 db.create_tables([User])

@@ -2,7 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, url_for  # u
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user # ログインが必要な処理に対するラッパー
 from werkzeug.security import generate_password_hash, check_password_hash  
 from peewee import IntegrityError  # ユーザー登録エラー
-from config import User
+from config import User, Message
 
 app = Flask(__name__)
 app.secret_key = "secret"
@@ -81,9 +81,24 @@ def unregister():
     return redirect(url_for("index"))  # url_forに変更
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
+    if request.method == "POST":
+        Message.create(user=current_user, content=request.form["content"])
+
+    messages = (
+        Message.select().where(Message.reply_to.is_null(True)).order_by(Message.pub_date.desc(), Message.id.desc())
+    )
+    return render_template("index.html", messages=messages)
+
+@app.route('/messages/<message_id>/delete/', methods=["POST"])
+@login_required
+def delete(message_id):
+    if Message.select().where((Message.id == message_id) & (Message.user==current_user)).first():
+        Message.delete_by_id(message_id)
+    else:
+        flash("無効な操作です")
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":
